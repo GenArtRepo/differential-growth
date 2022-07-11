@@ -39,16 +39,16 @@
 let play = true;
 
 let rope;
-let radius = 6; // Node radius
-let rlim = 6; //limit length (avoid intercepting line)
-let resampleLen = 5*2;
-let max_nodes = 2000;
+let radius = 11; // Node radius
+let rlim = 11; //limit length (avoid intercepting line)
+let resampleLen = 10*2;
+let max_nodes = 5000;
 
 
-const maxForce = 0.8; // Maximum steering force
-const maxSpeed = 0.8; // Maximum speed of nodes
-const desiredSeparation = 14;
-const cohesionRation = 0.88;
+const maxForce = 1.5; // Maximum steering force
+const maxSpeed = 1.5; // Maximum speed of nodes
+const desiredSeparation = 50;
+const cohesionRation = 0.80;
 const maxEdgeLen = 5;
 
 let settings = { 
