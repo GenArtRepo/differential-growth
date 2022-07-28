@@ -17,7 +17,7 @@ class Rope{
         this.nodes.splice(idx, 0, node);
     }
 
-    // Growth
+    // Gro #1wth
     // ======================
     // If the distance of two consecutive points is greater than the maximum 
     // distance allowed a new node is added to the rope located in the middle 
@@ -53,7 +53,8 @@ class Rope{
     }
 
     render(){
-        beginShape(POINTS);
+        // beginShape(POINTS);
+        beginShape();
         this.nodes.forEach(node => {
             vertex(node.position.x, node.position.y);
         });

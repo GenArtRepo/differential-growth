@@ -63,9 +63,7 @@ class Node {
       for (let other of nodes) {
         var distance = this.position.dist(other.position);
         if (distance > 0 && distance < this.desiredSeparation) {
-          var diff = createVector(this.position.x, this.position.y).sub(
-            other.position
-          );
+          var diff = p5.Vector.sub(this.position, other.position);
           diff.normalize();
           diff.div(distance); // Weight by distance
           steer.add(diff);
