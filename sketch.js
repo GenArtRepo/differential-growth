@@ -2,47 +2,54 @@
 ** Differential Growth
 * Cristian Rojas Cardenas, April 2022
 
-* Algorithm based on the processing implementation by Ahmad Moussa implementation.
+* Algorithm based on the processing implementation by Ahmad Moussa.
 * See the example here: 
 * https://editor.p5js.org/AhmadMoussa/sketches/ooNQ46VP2
 * And the processing implementation by Nekodigi.
 * https://github.com/Nekodigi/Growth
 *
-* The algorithm operates over a rope of nodes. The nodes and the rope have their 
-* own rules which are applied in every iteration. The main rule for the rope is 
-* defined as:
+* The simulation operates under a "rope of nodes" metaphor. The nodes and the rope have their 
+* own rules which are applied in every iteration.
+*
+* Nodes' behaviour is determined by the following rules:
 * 
-*        -	Growth: If the distance of two consecutive points is greater than the
-*                   maximum distance allowed a new node is added to the rope located 
-*                   in the middle position.
+*       - Separation: A node will steer to avoid colliding with other nodes.
+*                   Check for nearby nodes
+*                   Calculate repulsion force as the weighted average of the subtraction between 
+*                   the vector and all the vectors within a given radius.
+*                   Apply repulsion force to node.
 * 
-* Accordingly, the nodes follow the laws of:
+*       - Cohesion: A node will steer towards the centre of the group of all other nodes within a
+*                   given radius.
+*                   Check for nearby nodes.
+*                   Calculate the average position of all other nodes within radius.
+*                   Calculate attraction force toward centre of neighbouring nodes.
+*                   Apply attraction force to node.
 * 
-*       - Separation: Steer to avoid colliding with your neighbours.
-*                   Checks for nearby points and calculates the force applied as the
-*                   weighted average of all the vectors that steer away from each of 
-*                   the others.
+* The main rule for the rope is defined as:
 * 
-*       - Cohesion: Steer towards the center of your neighbors (stay with the group).
-*                   For the average location of his neighbour points, calculate the 
-*                   steering vector towards that location
+*        -	Growth: If the distance of two connected nodes is greater than the
+*                   maximum distance allowed a new node is inserted on the mid-point of the rope 
+*                   segment connecting the two nodes.
 * 
-* The extreme nodes of the rope are static, the normal nodes are initialized given 
-* the constants established at the start of the algorithm (maxSpeed, maxForce, 
-* desiredSeparation, maxEdgeLen) with some random changes added. 
+
 * 
-* The nodes are rendered through a map of vertices, if you want to visualize the 
-* rope without the nodes you can remove the POINTS argument.
+* In this implementation, the first and last nodes of the rope are static. Intermediate nodes
+* are initialized with set maxSpeed, maxForce, desiredSeparation and
+* maxEdgeLen parameters.
+* New nodes are initialised with the same parameters, with additional random variation. 
+* 
+* The rope can be rendered as a collection of nodes (uncomment line 56 and comment out line 57
+*  in rope.js) or as a continuous line (comment out line 56 and uncomment line 57 in rope.js).
 * 
 */
 
-let play = true;
+let play = false;
 
 let rope;
 
 const nodesStart = 20;
 const r = 10;
-
 const maxForce = 0.9; // Maximum steering force
 const maxSpeed = 1; // Maximum speed of nodes
 const desiredSeparation = 9;
@@ -93,11 +100,13 @@ function setup(){
     createCanvas(720, 400);
     strokeWeight(2);
     init();
+    rope.render();
 }
 
 function draw(){
     if(play){
         background(255);
+        stroke(0);
         rope.run();
         rope.render();
     }  

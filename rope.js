@@ -17,7 +17,6 @@ class Rope{
         this.nodes.splice(idx, 0, node);
     }
 
-
     // Differentiate
     // ======================
     differentiate() {
@@ -80,6 +79,6 @@ class Rope{
             else
                 p2 = this.nodes[i+1].position;
             line(p1.x, p1.y, p2.x, p2.y);
-          }
+        }
     }
 }
