@@ -6,31 +6,13 @@ class Node {
   
       this.maxForce = mF;
       this.maxSpeed = mS;
-      this.desiredSeparation = dS;
+      this.desiredSeparation = sq(dS);
   
       this.dontGrow = gS;
     }
   
-    run(nodes) {
-      if (this.dontGrow) {
-        this.differentiate(nodes);
-        this.update();
-      }
-    }
-  
     applyForce(force) {
       this.acceleration.add(force);
-    }
-  
-    differentiate(nodes) {
-      var separation = this.separate(nodes);
-      var cohesion = this.cohesion(nodes);
-  
-      separation.mult(settings.Sep);
-      cohesion.mult(settings.Coh);
-
-      this.applyForce(separation);
-      this.applyForce(cohesion);
     }
   
     update() {
@@ -61,13 +43,13 @@ class Node {
       var count = 0;
   
       for (let other of nodes) {
-        var distance = this.position.dist(other.position);
+        var distance = sq(this.position.x - other.position.x) 
+                                      + sq(this.position.y - other.position.y);
         if (distance > 0 && distance < this.desiredSeparation) {
-          var diff = createVector(this.position.x, this.position.y).sub(
-            other.position
-          );
+          var diff = createVector(this.position.x, this.position.y)
+          diff = diff.sub(other.position);
           diff.normalize();
-          diff.div(distance); // Weight by distance
+          diff.div(sqrt(distance)); // Weight by distance
           steer.add(diff);
           count++;
         }
