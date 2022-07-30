@@ -44,7 +44,7 @@
 * 
 */
 
-let play = false;
+let play = true;
 
 let rope;
 
