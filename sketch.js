@@ -44,27 +44,23 @@
 * 
 */
 
-let play = false;
+let play = true;
 
 let rope;
-let radius = 11; // Node radius
-let rlim = 11; //limit length (avoid intercepting line)
-let resampleLen = 10*2;
-let max_nodes = 5000;
 
-
-const maxForce = 1.5; // Maximum steering force
-const maxSpeed = 1.5; // Maximum speed of nodes
-const desiredSeparation = 50;
-// const cohesionRatio = 0.80; //unused const
+const nodesStart = 20;
+const r = 10;
+const maxForce = 0.9; // Maximum steering force
+const maxSpeed = 1; // Maximum speed of nodes
+const desiredSeparation = 9;
 const maxEdgeLen = 5;
 
 let settings = { 
   Play: function(){ play=true; },
   Pause: function(){ play=false; },
   Reset: function(){ init(); play=true; },
-  Sep: 0.88,
-  Coh: 1,
+  Sep: 1,
+  Coh: 0.9,
 }
 
 function gui(){
@@ -80,14 +76,14 @@ function gui(){
 
 function init(){
     rope = new Rope(maxForce, maxSpeed, desiredSeparation, maxEdgeLen);
-
-    // define position of initial nodes
-    initial_rope = [ 
-        [0, height/2, false], 
-        [width/3, height/2-6, true], 
-        [2*width/3, height/2+6, true], 
-        [width, height/2, false]
-    ]
+    
+    const angInc = TWO_PI/nodesStart;
+    initial_rope  = [];
+    for (var a=0; a<TWO_PI; a+=angInc) {
+        var x = width/2 + r*cos(a);
+        var y = height/2 + r*sin(a);
+        initial_rope.push([x, y, false]);
+      }
 
     initial_rope.forEach(attrs => {
         for(let i in initial_rope){
@@ -102,24 +98,16 @@ function init(){
 function setup(){
     gui();
     createCanvas(720, 400);
-    strokeWeight(1);
-    frameRate(10);
+    strokeWeight(2);
     init();
     rope.render();
 }
 
 function draw(){
-
     if(play){
         background(255);
         stroke(0);
         rope.run();
         rope.render();
-    }
-
-    //added text to track number of nodes
-    // noStroke();
-    // text(rope.nodes.length, 10, 20);
-
-    
+    }  
 }
